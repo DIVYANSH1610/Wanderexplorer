@@ -1,0 +1,912 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WanderExplorer - Discover Your Dream Destination</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700;800&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: #0a0e27;
+            color: #fff;
+            overflow-x: hidden;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #0a0e27, #1a1f3a, #2d1b4e, #1a1f3a);
+            background-size: 400% 400%;
+            animation: gradientShift 15s ease infinite;
+            z-index: -1;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .stars {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+        }
+
+        .star {
+            position: absolute;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite;
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0.3; }
+            50% { opacity: 1; }
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 40px 20px;
+            position: relative;
+        }
+
+        .hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('d896f978295943dcb4a09fbc77738cfc') center/cover;
+            opacity: 0.15;
+            z-index: -1;
+        }
+
+        .logo {
+            font-size: 2rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 10px;
+            animation: fadeInDown 1s ease;
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero h1 {
+            font-size: 5rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.2;
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero p {
+            font-size: 1.4rem;
+            margin-bottom: 50px;
+            color: #a0aec0;
+            font-weight: 300;
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .search-box {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 60px;
+            padding: 10px;
+            display: flex;
+            gap: 10px;
+            max-width: 700px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeInUp 1s ease 0.6s both;
+        }
+
+        .search-input {
+            flex: 1;
+            padding: 20px 30px;
+            font-size: 1.1rem;
+            border: none;
+            background: transparent;
+            color: white;
+            outline: none;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .search-input::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .search-btn {
+            padding: 20px 45px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-family: 'Poppins', sans-serif;
+            box-shadow: 0 10px 30px rgba(102, 126, 234, 0.4);
+        }
+
+        .search-btn:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 15px 40px rgba(102, 126, 234, 0.6);
+        }
+
+        .search-btn:active {
+            transform: translateY(-1px) scale(1.02);
+        }
+
+        /* Container */
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 60px 20px;
+        }
+
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .clear-btn {
+            padding: 15px 35px;
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .clear-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
+        }
+
+        /* Destinations Grid */
+        .destinations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(380px, 1fr));
+            gap: 35px;
+        }
+
+        .destination-card {
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            overflow: hidden;
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            position: relative;
+            animation: cardFadeIn 0.6s ease both;
+            cursor: pointer;
+        }
+
+        @keyframes cardFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(30px) scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        .destination-card:hover {
+            transform: translateY(-10px) scale(1.02);
+            box-shadow: 0 25px 50px rgba(102, 126, 234, 0.3);
+            border-color: rgba(102, 126, 234, 0.5);
+        }
+
+        .card-image {
+            height: 280px;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card-image::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(to bottom, transparent 0%, rgba(10, 14, 39, 0.8) 100%);
+            z-index: 1;
+        }
+
+        .card-image::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3), rgba(240, 147, 251, 0.3));
+            opacity: 0;
+            transition: opacity 0.4s;
+            z-index: 1;
+        }
+
+        .destination-card:hover .card-image::after {
+            opacity: 1;
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            border: none;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.5rem;
+            color: #ff6b6b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            z-index: 10;
+            font-weight: 300;
+        }
+
+        .remove-btn:hover {
+            background: #ff6b6b;
+            color: white;
+            transform: rotate(90deg) scale(1.1);
+            box-shadow: 0 5px 20px rgba(255, 107, 107, 0.5);
+        }
+
+        .card-content {
+            padding: 30px;
+        }
+
+        .destination-name {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .country-flag {
+            font-size: 1.8rem;
+        }
+
+        .weather-info {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.2), rgba(118, 75, 162, 0.2));
+            border-radius: 18px;
+            margin-bottom: 20px;
+            border: 1px solid rgba(102, 126, 234, 0.3);
+        }
+
+        .weather-icon {
+            width: 70px;
+            height: 70px;
+            filter: drop-shadow(0 0 10px rgba(255, 255, 255, 0.5));
+        }
+
+        .weather-details {
+            flex: 1;
+        }
+
+        .temperature {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .weather-desc {
+            font-size: 1rem;
+            color: #a0aec0;
+            text-transform: capitalize;
+            margin-top: 5px;
+        }
+
+        .description {
+            color: #a0aec0;
+            line-height: 1.8;
+            font-size: 0.95rem;
+        }
+
+        .loading {
+            text-align: center;
+            color: #a0aec0;
+            font-size: 1.3rem;
+            padding: 60px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; }
+            50% { opacity: 1; }
+        }
+
+        .error {
+            background: rgba(255, 107, 107, 0.1);
+            border: 2px solid #ff6b6b;
+            color: #ff6b6b;
+            padding: 20px 30px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            text-align: center;
+            font-weight: 500;
+            animation: shake 0.5s;
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 100px 20px;
+        }
+
+        .empty-state-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        .empty-state-text {
+            font-size: 1.5rem;
+            color: #a0aec0;
+            margin-bottom: 10px;
+        }
+
+        .empty-state-subtext {
+            font-size: 1rem;
+            color: #718096;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            animation: fadeIn 0.3s;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(10px);
+            margin: 5% auto;
+            padding: 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            width: 80%;
+            max-width: 900px;
+            max-height: 80vh;
+            overflow-y: auto;
+            position: relative;
+            animation: slideIn 0.3s;
+        }
+
+        @keyframes slideIn {
+            from { transform: translateY(-50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        .close:hover {
+            color: #ff6b6b;
+        }
+
+        .modal h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #f093fb 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal p {
+            color: #a0aec0;
+            line-height: 1.8;
+            margin-bottom: 30px;
+            font-size: 1.1rem;
+        }
+
+        .modal h3 {
+            font-size: 1.8rem;
+            margin: 30px 0 15px;
+            color: #fff;
+        }
+
+        .modal ul {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+        }
+
+        .modal li {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 10px 15px;
+            margin: 10px 0;
+            border-radius: 10px;
+            color: #a0aec0;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 10px;
+            transition: transform 0.3s;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.05);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 3rem;
+            }
+
+            .hero p {
+                font-size: 1rem;
+            }
+
+            .search-box {
+                flex-direction: column;
+                border-radius: 25px;
+            }
+
+            .search-btn {
+                width: 100%;
+            }
+
+            .destinations-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .section-header {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .section-title {
+                font-size: 2rem;
+                text-align: center;
+            }
+
+            .modal-content {
+                width: 95%;
+                margin: 10% auto;
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+    <div class="stars" id="stars"></div>
+
+    <div class="hero">
+        <div class="logo">✈️ WANDEREXPLORER</div>
+        <h1>Explore the World</h1>
+        <p>Your journey to discovery starts here</p>
+        <div class="search-box">
+            <input 
+                type="text" 
+                class="search-input" 
+                id="cityInput" 
+                placeholder="Where do you want to go? (e.g., Paris, Tokyo, New York)"
+                autocomplete="off"
+            >
+            <button class="search-btn" onclick="searchDestination()">
+                Explore Now
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+        <div class="section-header">
+            <h2 class="section-title">Your Dream Destinations</h2>
+            <button class="clear-btn" onclick="clearAll()" id="clearBtn" style="display: none;">
+                🗑️ Clear All
+            </button>
+        </div>
+        <div id="errorMessage"></div>
+        <div id="destinationsGrid" class="destinations-grid"></div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close">&times;</span>
+            <div id="modalBody"></div>
+        </div>
+    </div>
+
+    <script>
+        // API Keys - Updated with demo key for OpenWeatherMap
+        // For Unsplash: Replace with your own from https://unsplash.com/developers (free signup, 50 req/hr demo mode)
+        const UNSPLASH_ACCESS_KEY = 'ZLieZypv1RYBHHJrEUoqiDlLNlYe1SzBr48wwUKkgS0'; 
+        // For OpenWeatherMap: Using a public demo key (limited use)
+        const OPENWEATHER_API_KEY = 'bd5e378503939ddaee76f12ad7a97608';
+
+        // Create animated stars
+        function createStars() {
+            const starsContainer = document.getElementById('stars');
+            for (let i = 0; i < 100; i++) {
+                const star = document.createElement('div');
+                star.className = 'star';
+                star.style.width = Math.random() * 3 + 'px';
+                star.style.height = star.style.width;
+                star.style.left = Math.random() * 100 + '%';
+                star.style.top = Math.random() * 100 + '%';
+                star.style.animationDelay = Math.random() * 3 + 's';
+                starsContainer.appendChild(star);
+            }
+        }
+
+        createStars();
+
+        // Modal functionality
+        const modal = document.getElementById('modal');
+        const closeBtn = document.querySelector('.close');
+        const modalBody = document.getElementById('modalBody');
+
+        closeBtn.onclick = function() {
+            modal.style.display = 'none';
+        }
+
+        window.onclick = function(event) {
+            if (event.target == modal) {
+                modal.style.display = 'none';
+            }
+        }
+
+        function openModal(destination) {
+            modalBody.innerHTML = `
+                <h2>${destination.name}, ${destination.country}</h2>
+                <p>${destination.summary || 'Discover the magic of ' + destination.name + '! This incredible destination offers breathtaking landscapes, rich cultural heritage, and unforgettable experiences.'}</p>
+                <h3>Featured Highlights</h3>
+                <p style="color: #a0aec0; font-style: italic;">Dive into the vibrant culture, traditions, and iconic spots through these captivating images.</p>
+                <div class="gallery">
+                    ${(destination.gallery || [destination.image]).map(img => `<img src="${img}" alt="${destination.name} highlight">`).join('')}
+                </div>
+            `;
+            modal.style.display = 'block';
+        }
+
+        // Load destinations on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            loadDestinations();
+        });
+
+        // Enter key to search
+        document.getElementById('cityInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                searchDestination();
+            }
+        });
+
+        async function searchDestination() {
+            const cityInput = document.getElementById('cityInput');
+            const city = cityInput.value.trim();
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.innerHTML = '';
+
+            if (!city) {
+                showError('⚠️ Please enter a city name to explore');
+                return;
+            }
+
+            // Validate only essential API keys
+            if (OPENWEATHER_API_KEY === 'YOUR_OPENWEATHER_API_KEY_HERE') {
+                showError('🔑 Please add your OpenWeatherMap API key (free signup at https://openweathermap.org/api)');
+                return;
+            }
+
+            console.log('Searching for:', city);
+
+            // Show loading
+            const grid = document.getElementById('destinationsGrid');
+            const existingCards = grid.innerHTML;
+            grid.innerHTML = '<div class="loading">🌍 Discovering ' + city + '...</div>' + existingCards;
+
+            try {
+                console.log('Fetching weather data...');
+                // Fetch weather data
+                const weatherResponse = await fetch(
+                    `https://api.openweathermap.org/data/2.5/weather?q=${encodeURIComponent(city)}&appid=${OPENWEATHER_API_KEY}&units=metric`
+                );
+
+                console.log('Weather response status:', weatherResponse.status);
+
+                if (!weatherResponse.ok) {
+                    const errorData = await weatherResponse.json();
+                    console.error('Weather API error:', errorData);
+                    throw new Error('🗺️ City not found! Please check the spelling and try again.');
+                }
+
+                const weatherData = await weatherResponse.json();
+                console.log('Weather data received:', weatherData);
+
+                console.log('Fetching Unsplash image...');
+                // Fetch main image from Unsplash
+                let imageUrl = 'https://images.unsplash.com/photo-1502920917128-1aa500764cbd?w=1200';
+                let gallery = [];
+                if (UNSPLASH_ACCESS_KEY && UNSPLASH_ACCESS_KEY !== 'YOUR_UNSPLASH_ACCESS_KEY_HERE') {
+                    const mainImageResponse = await fetch(
+                        `https://api.unsplash.com/search/photos?query=${encodeURIComponent(city + ' city aerial view')}&per_page=1&orientation=landscape&client_id=${UNSPLASH_ACCESS_KEY}`
+                    );
+
+                    console.log('Main Unsplash response status:', mainImageResponse.status);
+
+                    if (mainImageResponse.ok) {
+                        const mainImageData = await mainImageResponse.json();
+                        if (mainImageData.results && mainImageData.results.length > 0) {
+                            imageUrl = mainImageData.results[0].urls.regular;
+                        }
+                    }
+
+                    // Enhanced gallery: Multiple themed queries for more appealing visuals
+                    console.log('Fetching enhanced Unsplash gallery...');
+                    const queries = [
+                        `${city} landmarks`,
+                        `${city} culture traditions`,
+                        `${city} street food`,
+                        `${city} architecture`,
+                        `${city} festivals`,
+                        `${city} nature parks`
+                    ];
+                    const galleryPromises = queries.map(q => 
+                        fetch(
+                            `https://api.unsplash.com/search/photos?query=${encodeURIComponent(q)}&per_page=2&orientation=landscape&client_id=${UNSPLASH_ACCESS_KEY}`
+                        ).then(r => r.ok ? r.json() : { results: [] }).catch(() => ({ results: [] }))
+                    );
+
+                    const galleryResponses = await Promise.all(galleryPromises);
+                    gallery = galleryResponses.flatMap(res => res.results ? res.results.map(r => r.urls.regular) : []).slice(0, 12); // Up to 12 diverse images
+                }
+
+                // Fetch Wikipedia summary
+                console.log('Fetching Wikipedia summary...');
+                const wikiUrl = `https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(city)}`;
+                const wikiRes = await fetch(wikiUrl).then(r => r.json().catch(() => ({ extract: '' })));
+
+                // Create destination object
+                const destination = {
+                    id: Date.now(),
+                    name: weatherData.name,
+                    country: weatherData.sys.country,
+                    temp: Math.round(weatherData.main.temp),
+                    feelsLike: Math.round(weatherData.main.feels_like),
+                    weather: weatherData.weather[0].description,
+                    icon: weatherData.weather[0].icon,
+                    image: imageUrl,
+                    summary: wikiRes.extract || '',
+                    gallery: gallery,
+                    description: `Discover the magic of ${weatherData.name}! This incredible destination offers breathtaking landscapes, rich cultural heritage, and unforgettable experiences. From stunning architecture to vibrant local culture, your adventure awaits in this remarkable city.`
+                };
+
+                // Add main image to gallery if not already included
+                if (!gallery.includes(imageUrl)) {
+                    destination.gallery.unshift(imageUrl);
+                }
+
+                // Save to localStorage
+                saveDestination(destination);
+
+                // Clear input with animation
+                cityInput.value = '';
+                cityInput.placeholder = '✨ Great choice! Add another destination...';
+                setTimeout(() => {
+                    cityInput.placeholder = 'Where do you want to go? (e.g., Paris, Tokyo, New York)';
+                }, 3000);
+
+                // Reload destinations
+                loadDestinations();
+
+            } catch (error) {
+                console.error('Error details:', error);
+                showError('❌ ' + error.message + ' (Check browser console for details)');
+                loadDestinations();
+            }
+        }
+
+        function saveDestination(destination) {
+            let destinations = JSON.parse(localStorage.getItem('wanderlust_destinations')) || [];
+            
+            // Check if destination already exists
+            const exists = destinations.some(d => 
+                d.name.toLowerCase() === destination.name.toLowerCase()
+            );
+
+            if (!exists) {
+                destinations.unshift(destination);
+                localStorage.setItem('wanderlust_destinations', JSON.stringify(destinations));
+            } else {
+                showError('📍 ' + destination.name + ' is already in your list!');
+            }
+        }
+
+        function loadDestinations() {
+            const destinations = JSON.parse(localStorage.getItem('wanderlust_destinations')) || [];
+            const grid = document.getElementById('destinationsGrid');
+            const clearBtn = document.getElementById('clearBtn');
+
+            if (destinations.length === 0) {
+                grid.innerHTML = `
+                    <div class="empty-state">
+                        <div class="empty-state-icon">🌎</div>
+                        <div class="empty-state-text">No destinations yet</div>
+                        <div class="empty-state-subtext">Start exploring by searching for your dream city above!</div>
+                    </div>
+                `;
+                clearBtn.style.display = 'none';
+                return;
+            }
+
+            clearBtn.style.display = 'block';
+
+            grid.innerHTML = destinations.map((dest, index) => `
+                <div class="destination-card" style="animation-delay: ${index * 0.1}s" onclick="handleCardClick(${index}, event)">
+                    <div class="card-image" style="background-image: url('${dest.image}')">
+                        <button class="remove-btn" onclick="removeDestination(${dest.id}); event.stopPropagation();" title="Remove destination">×</button>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="destination-name">
+                            ${dest.name}, ${dest.country}
+                        </h3>
+                        <div class="weather-info">
+                            <img src="https://openweathermap.org/img/wn/${dest.icon}@2x.png" alt="Weather" class="weather-icon">
+                            <div class="weather-details">
+                                <div class="temperature">${dest.temp}°C</div>
+                                <div class="weather-desc">${dest.weather}</div>
+                            </div>
+                        </div>
+                        <p class="description">${dest.description}</p>
+                    </div>
+                </div>
+            `).join('');
+
+        }
+
+        function handleCardClick(index, event) {
+            if (event.target.classList.contains('remove-btn') || event.target.closest('.remove-btn')) {
+                return; // Don't open modal if clicking remove
+            }
+            const destinations = JSON.parse(localStorage.getItem('wanderlust_destinations')) || [];
+            openModal(destinations[index]);
+        }
+
+        function removeDestination(id) {
+            let destinations = JSON.parse(localStorage.getItem('wanderlust_destinations')) || [];
+            destinations = destinations.filter(dest => dest.id !== id);
+            localStorage.setItem('wanderlust_destinations', JSON.stringify(destinations));
+            loadDestinations();
+        }
+
+        function clearAll() {
+            if (confirm('🗑️ Are you sure you want to remove all destinations from your list?')) {
+                localStorage.removeItem('wanderlust_destinations');
+                loadDestinations();
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.innerHTML = `<div class="error">${message}</div>`;
+            setTimeout(() => {
+                errorDiv.innerHTML = '';
+            }, 5000);
+        }
+    </script>
+</body>
+</html>
